@@ -13,7 +13,12 @@
 (setq un remote_user)
 
 (de url_dec (S) 
-  (pack S)
+(!)
+  (pack 
+    (mapcar '((s)
+      (cons (char (hex (pack (head 2 s))) (nth s 3)))
+    ) (cdr (split (replace S "+" " ") '%)))
+  )
 )
 
 (de process_qs (Qs)
@@ -28,4 +33,3 @@
 (when (member req_meth '(POST PUT)) 
   (process_qs (in () (read)))
 )
-
