@@ -13,11 +13,16 @@
 (setq un remote_user)
 
 (de url_dec (S) 
-(!)
-  (pack 
-    (mapcar '((s)
-      (cons (char (hex (pack (head 2 s)))) (nth s 3))
-    ) (cdr (split (replace S "+" " ") '%)))
+  (let (s (split (replace S "+" " ") '%))
+    (pack 
+      (cons 
+        (car s)
+        (mapcar '((s)
+          (cons (char (hex (pack (head 2 s)))) (nth s 3))
+        ) (cdr s))
+
+      )
+    )
   )
 )
 
