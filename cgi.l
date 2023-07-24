@@ -1,4 +1,4 @@
-#!/usr/lib/cgi-bin/pil21/bin/picolisp
+#!/usr/lib/cgi-bin/pil21/pil
 
 (symbols 'r 'pico)
 
