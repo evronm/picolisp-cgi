@@ -16,7 +16,7 @@
 (!)
   (pack 
     (mapcar '((s)
-      (cons (char (hex (pack (head 2 s))) (nth s 3)))
+      (cons (char (hex (pack (head 2 s)))) (nth s 3))
     ) (cdr (split (replace S "+" " ") '%)))
   )
 )
