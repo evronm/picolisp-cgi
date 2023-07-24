@@ -1,6 +1,6 @@
 #!/usr/lib/cgi-bin/pil21/bin/picolisp
 
-(symbols 'req 'pico)
+(symbols 'r 'pico)
 
 #all environment vars for CGI in which we're interested.
 ( for v  '(SERVER_PROTOCOL SERVER_PORT REQUEST_METHOD PATH_INFO PATH_TRANSLATED SCRIPT_NAME QUERY_STRING REMOTE_HOST REMOTE_ADDR AUTH_TYPE REMOTE_USER REMOTE_IDENT CONTENT_TYPE CONTENT_LENGTH HOME)
@@ -20,21 +20,22 @@
         (mapcar '((s)
           (cons (char (hex (pack (head 2 s)))) (nth s 3))
         ) (cdr s))
-
       )
     )
   )
 )
 
 (de process_qs (Qs)
-  (for qs (split (chop Qs) '& )
-    (let kv (split qs '=)
-      (set (intern (car kv)) (url_dec (cadr kv)))
-    )
+  (mapcar 
+    '((Kv)
+      (let kv (split Kv '=)
+        (list (pack (car kv)) ( url_dec (cadr kv)))
+      )
+     )
+    (split (chop Qs) '& )
   )
-
 )
 
 (when (member req_meth '(POST PUT)) 
-  (process_qs (in () (read)))
+  (setq post (process_qs (in () (read))))
 )
