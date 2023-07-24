@@ -40,3 +40,7 @@
 (when (member req_meth '(POST PUT)) 
   (setq post (parse_qs (in () (read))))
 )
+
+(if *Dbg
+  ~(assert (= '(("a" "x u") ("b" "123!")) (r~parse_qs "a=x%20u&b=123%21")))
+)
