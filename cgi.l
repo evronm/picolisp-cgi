@@ -4,7 +4,7 @@
 
 #all environment vars for CGI in which we're interested.
 ( for v  '(SERVER_PROTOCOL SERVER_PORT REQUEST_METHOD PATH_INFO PATH_TRANSLATED SCRIPT_NAME QUERY_STRING REMOTE_HOST REMOTE_ADDR AUTH_TYPE REMOTE_USER REMOTE_IDENT CONTENT_TYPE CONTENT_LENGTH HOME)
-  (set (intern (lowc v)) (sys v))
+  (set (intern (lowc v) 'r) (sys v)) #intern into this namespace
 )
 
 #shorthands
@@ -24,7 +24,7 @@
   )
 )
 
-(de process_qs (Qs)
+(de parse_qs (Qs)
   (mapcar 
     '((Kv)
       (let kv (split Kv '=)
@@ -35,8 +35,8 @@
   )
 )
 
-(setq qs (process_qs query_string))
+(setq qs (parse_qs query_string))
 
 (when (member req_meth '(POST PUT)) 
-  (setq post (process_qs (in () (read))))
+  (setq post (parse_qs (in () (read))))
 )
