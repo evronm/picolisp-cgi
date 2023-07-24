@@ -9,7 +9,6 @@
 
 #shorthands
 (setq req_meth request_method)
-(setq q query_string)
 (setq un remote_user)
 
 (de url_dec (S) 
@@ -35,6 +34,8 @@
     (split (chop Qs) '& )
   )
 )
+
+(setq qs (process_qs query_string))
 
 (when (member req_meth '(POST PUT)) 
   (setq post (process_qs (in () (read))))
