@@ -1,15 +1,12 @@
 #!/usr/lib/cgi-bin/pil21/pil
 
-(symbols 'r 'pico)
+(load "lib/util.l")
+(symbols 'r 'util 'pico)
 
-#all environment vars for CGI in which we're interested.
-( for v  '(SERVER_PROTOCOL SERVER_PORT REQUEST_METHOD PATH_INFO PATH_TRANSLATED SCRIPT_NAME QUERY_STRING REMOTE_HOST REMOTE_ADDR AUTH_TYPE REMOTE_USER REMOTE_IDENT CONTENT_TYPE CONTENT_LENGTH HOME)
-  (set (intern (lowc v) 'r) (sys v)) #intern into this namespace
-)
 
 #shorthands
-(setq req_meth request_method)
-(setq un remote_user)
+(de req_meth () (sys 'REQUEST_METHOD) )
+(de pth () (cdr (sc (sys 'SCRIPT_NAME) "/")))
 
 (de url_dec (S) 
   (let (s (split (replace S "+" " ") '%))
@@ -31,16 +28,18 @@
         (list (pack (car kv)) ( url_dec (cadr kv)))
       )
      )
-    (split (chop Qs) '& )
+    (sc Qs '&)
   )
 )
 
-(setq qs (parse_qs query_string))
+(setq qs (parse_qs (sys 'QUERY_STRING)))
 
 (when (member req_meth '(POST PUT)) 
   (setq post (parse_qs (in () (read))))
 )
 
-(if *Dbg
+(when *Dbg
   ~(assert (= '(("a" "x u") ("b" "123!")) (r~parse_qs "a=x%20u&b=123%21")))
+  (sys 'SCRIPT_NAME "/foo/1/bar/2")
+  ~(assert (= (pth) '(("f" "o" "o") ("1") ("b" "a" "r") ("2")) ) )
 )
